@@ -1,4 +1,4 @@
-#IDVC (Inteligent Distributed Vehicle Control)
+##IDVC (Inteligent Distributed Vehicle Control)
 
-##TODO:
+###TODO:
 * Add more to README file.
