@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class Main extends Application
 {
     private final String Title = "IDVC";
-    private final Pair<Integer,Integer> winSize = new Pair<>(1920,1080);
+    private final Pair<Integer,Integer> winSize = new Pair<>(1000,500);
     private final int carL = 44;
     private final int carW = 26;
 
@@ -33,17 +33,17 @@ public class Main extends Application
 
         ArrayList<ImageView> carTex = new ArrayList<>();
         carTex.add(new ImageView(new Image("file:./res/img/SimcarRed.png", carL, carW, true, false)));
-        carTex.add(new ImageView(new Image("file:./res/img/SimcarBlue.png", carL, carW, true, false)));
-        carTex.add(new ImageView(new Image("file:./res/img/SimcarGreen.png", carL, carW, true, false)));
+        //carTex.add(new ImageView(new Image("file:./res/img/SimcarBlue.png", carL, carW, true, false)));
+        //carTex.add(new ImageView(new Image("file:./res/img/SimcarGreen.png", carL, carW, true, false)));
 
         ArrayList<Vehicle> car = new ArrayList<>();
-        car.add(new Vehicle(200,0,520,0));
-        car.add(new Vehicle(200,0,540,0));
-        car.add(new Vehicle(200,0,560,0));
+        car.add(new Vehicle(200,500,50,0));
+        //car.add(new Vehicle(200,0,250,0));
+        //car.add(new Vehicle(200,0,270,0));
 
-        car.get(0).stop(100);
-        car.get(1).stop(40);
-        car.get(2).stop(20);
+        car.get(0).turn(1080, 60);
+        //car.get(1).stop(50);
+        //car.get(2).stop(25);
 
         new AnimationTimer()
         {
