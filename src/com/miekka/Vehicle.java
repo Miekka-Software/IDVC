@@ -6,6 +6,11 @@ public class Vehicle {
     private double H;
     private Spatial S;
 
+    /*TODO:
+    * 1. Change all attributes, V, H, etc. to arrays of 3 where: [current, target, delta].
+    * 2. Once that is in place, there will be no need for A, revise getA to take the 'delta' from V.
+    */
+
     public Vehicle(double velocity, double acceleration, double xPosition, double yPosition, double initHeading) {
         this.V = velocity/100; //Translate to milliseconds
         this.A = acceleration/100; //Translate to milliseconds
