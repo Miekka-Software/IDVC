@@ -12,8 +12,8 @@ public class Vehicle {
     */
 
     public Vehicle(double velocity, double acceleration, double xPosition, double yPosition, double initHeading) {
-        this.V = velocity/100; //Translate to milliseconds
-        this.A = acceleration/100; //Translate to milliseconds
+        this.V = velocity/60; //Translate to 60fps
+        this.A = acceleration/60; //Translate to 60fps
         this.H = initHeading % 360;
         this.S = new Spatial(xPosition,yPosition);
     }
@@ -26,11 +26,11 @@ public class Vehicle {
     }
 
     public double getV() {
-        return V*100;
+        return V*60;
     }
 
     public double getA() {
-        return A*100;
+        return A*60;
     }
 
     public double getH() {

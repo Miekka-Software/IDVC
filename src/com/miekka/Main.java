@@ -43,15 +43,10 @@ public class Main extends Application
 
         new AnimationTimer()
         {
-            long lastTick = System.nanoTime();
             public void handle(long currentNanoTime)
             {
-                double timeSinceLastTick = (currentNanoTime - lastTick) / 10000000.0; //Divide into 100ths of seconds
-                if(timeSinceLastTick>1) {
-                    for(Vehicle C : car) {
-                        C.updateState();
-                    }
-                    lastTick = System.nanoTime();
+                for(Vehicle C : car) {
+                    C.updateState();
                 }
 
                 root.getChildren().clear();
