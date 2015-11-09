@@ -11,5 +11,4 @@ public class Spatial {
         this.P.fst += mx;
         this.P.snd += my;
     }
-
 }
