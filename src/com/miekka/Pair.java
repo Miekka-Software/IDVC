@@ -5,8 +5,8 @@ public class Pair<F,S> {
     public S snd;
 
     public Pair(F f, S s) {
-        this.fst = f;
-        this.snd = s;
+        fst = f;
+        snd = s;
     }
 
     public String show() {

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class Main extends Application
 {
     private final String Title = "IDVC";
-    private final Pair<Integer,Integer> winSize = new Pair<>(1000,500);
+    private final Pair<Integer,Integer> winSize = new Pair<>(1920,1080);
     private final int carL = 44;
     private final int carW = 26;
 
@@ -37,9 +37,13 @@ public class Main extends Application
         carTex.add(new ImageView(new Image("file:./res/img/SimcarGreen.png", carL, carW, true, false)));
 
         ArrayList<Vehicle> car = new ArrayList<>();
-        car.add(new Vehicle(0,1.00,0,220,0));
-        car.add(new Vehicle(0,1.01,0,250,0));
-        car.add(new Vehicle(0,0.99,0,280,0));
+        car.add(new Vehicle(200,0,520,0));
+        car.add(new Vehicle(200,0,540,0));
+        car.add(new Vehicle(200,0,560,0));
+
+        car.get(0).stop(100);
+        car.get(1).stop(40);
+        car.get(2).stop(20);
 
         new AnimationTimer()
         {
