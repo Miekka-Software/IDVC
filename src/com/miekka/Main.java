@@ -32,9 +32,9 @@ public class Main extends Application
         theStage.setHeight(winSize.snd);
 
         ArrayList<ImageView> carTex = new ArrayList<>();
-        carTex.add(new ImageView(new Image("file:///home/brady/Documents/Programming/Java/IDVC/res/img/SimcarRed.png", carL, carW, true, false)));
-        carTex.add(new ImageView(new Image("file:///home/brady/Documents/Programming/Java/IDVC/res/img/SimcarBlue.png", carL, carW, true, false)));
-        carTex.add(new ImageView(new Image("file:///home/brady/Documents/Programming/Java/IDVC/res/img/SimcarGreen.png", carL, carW, true, false)));
+        carTex.add(new ImageView(new Image("file:./res/img/SimcarRed.png", carL, carW, true, false)));
+        carTex.add(new ImageView(new Image("file:./res/img/SimcarBlue.png", carL, carW, true, false)));
+        carTex.add(new ImageView(new Image("file:./res/img/SimcarGreen.png", carL, carW, true, false)));
 
         ArrayList<Vehicle> car = new ArrayList<>();
         car.add(new Vehicle(0,1.00,0,220,0));
