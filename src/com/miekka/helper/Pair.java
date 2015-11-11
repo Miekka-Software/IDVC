@@ -1,4 +1,4 @@
-package com.miekka;
+package com.miekka.helper;
 
 public class Pair<F,S> {
     public F fst;

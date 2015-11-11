@@ -1,14 +1,14 @@
 package com.miekka;
 
-public class Vehicle {
-    private double[] V;
-    private double[] H;
-    private Spatial S;
+import com.miekka.helper.Pair;
 
-    public Vehicle(double velocity, double xPosition, double yPosition, double initHeading) {
+public class Vehicle extends SimObject {
+
+    public Vehicle(double velocity, double xPosition, double yPosition, double initHeading, Pair<Double,Double> sz) {
         V = new double[]{velocity,velocity,0};
         H = new double[]{initHeading,initHeading,0};
-        S = new Spatial(xPosition,yPosition);
+        P = new Pair<>(xPosition,yPosition);
+        Sz = sz;
     }
 
     private void adjustTo(double[] P) {
@@ -36,7 +36,7 @@ public class Vehicle {
         adjustTo(H);
         double xv = V[0]/60 * Math.cos(Math.toRadians(H[0]));
         double yv = V[0]/60 * Math.sin(Math.toRadians(H[0]));
-        S.move(xv,yv);
+        move(xv,yv);
     }
 
     public void accelerate(double tv, double dv) {
@@ -67,15 +67,15 @@ public class Vehicle {
     }
 
     public double getX() {
-        return S.P.fst;
+        return P.fst;
     }
 
     public double getY() {
-        return S.P.snd;
+        return P.snd;
     }
 
     public String showPos() {
-        return S.P.show();
+        return P.show();
     }
 
 }
