@@ -51,6 +51,7 @@ public class Main extends Application
             {
                 for(Vehicle C : car) {
                     C.updateState();
+                    System.out.println(C.containsPoint(500,50));
                 }
 
                 root.getChildren().clear();
