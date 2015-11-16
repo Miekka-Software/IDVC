@@ -12,8 +12,20 @@ public class SimObject {
 
     public SimObject() {}
 
-    //Margin of error increases as the angle of rectangle rotation approaches 45 degrees.
-    //The closer to 45, the more inaccurate the system. This is an obvious bug.
+    /*TODO:
+    * 1. Clean up this code. Abstract and try to eliminate repetition.
+    * 2. Run lots more tests on 'containsPoint' stuff.
+    * 3. Merge 'testing' into 'master'.
+    * 4. After testing 'containsPoint', create a new 'collisionMap' class for the rest of collision handling.
+    *   collisionMap class:
+    *       * Add a collisionMap class that allows the user to "register" vehicles.
+    *       * collisionMap.checkCollide() returns an array. Empty for no collisions, and otherwise contains
+    *         all vehicles involved in the collision.
+    *       * collisionMap is a hashMap datatype that stores all registered cars as the keys, and a boolean
+    *         for collision as the value.
+    *       * Perhaps several smaller local collisionMaps could be used in place of one large one for the
+     *        sake of performance.
+    */
 
     public ArrayList<Pair<Double,Double>> corners() {
         double L = Sz.fst;
@@ -25,10 +37,10 @@ public class SimObject {
         double ad = Math.toDegrees(Math.atan((-W/2)/(L/2))) + 360;
 
         ArrayList<Pair<Double,Double>> c = new ArrayList<>(4);
-        c.add(new Pair<>((Math.cos(Math.toRadians(ab - H[0])) * hyp) + P.fst, (Math.sin(Math.toRadians(ab - H[0])) * hyp) + P.snd));
-        c.add(new Pair<>((Math.cos(Math.toRadians(aa - H[0])) * hyp) + P.fst, (Math.sin(Math.toRadians(aa - H[0])) * hyp) + P.snd));
-        c.add(new Pair<>((Math.cos(Math.toRadians(ad - H[0])) * hyp) + P.fst, (Math.sin(Math.toRadians(ad - H[0])) * hyp) + P.snd));
-        c.add(new Pair<>((Math.cos(Math.toRadians(ac - H[0])) * hyp) + P.fst, (Math.sin(Math.toRadians(ac - H[0])) * hyp) + P.snd));
+        c.add(new Pair<>((Math.cos(Math.toRadians(ab + H[0])) * hyp) + P.fst, (Math.sin(Math.toRadians(ab + H[0])) * hyp) + P.snd));
+        c.add(new Pair<>((Math.cos(Math.toRadians(aa + H[0])) * hyp) + P.fst, (Math.sin(Math.toRadians(aa + H[0])) * hyp) + P.snd));
+        c.add(new Pair<>((Math.cos(Math.toRadians(ad + H[0])) * hyp) + P.fst, (Math.sin(Math.toRadians(ad + H[0])) * hyp) + P.snd));
+        c.add(new Pair<>((Math.cos(Math.toRadians(ac + H[0])) * hyp) + P.fst, (Math.sin(Math.toRadians(ac + H[0])) * hyp) + P.snd));
         return c;
     }
 
@@ -44,7 +56,7 @@ public class SimObject {
     }
 
     private boolean inequality(Pair<double[],Boolean> ln, double x, double y) {
-        return (ln.snd ? y < ln.fst[0] * (x - ln.fst[1]) + ln.fst[2] : y > ln.fst[0] * (x - ln.fst[1]) + ln.fst[2]);
+        return (ln.snd ? y <= ln.fst[0] * (x - ln.fst[1]) + ln.fst[2] : y >= ln.fst[0] * (x - ln.fst[1]) + ln.fst[2]);
     }
 
     public void move(double mx, double my) {
@@ -59,10 +71,6 @@ public class SimObject {
             Pair<double[], Boolean> ln2 = pntsToLn(cs.get(1), cs.get(2));
             Pair<double[], Boolean> ln3 = pntsToLn(cs.get(2), cs.get(3));
             Pair<double[], Boolean> ln4 = pntsToLn(cs.get(3), cs.get(0));
-            System.out.println("Line 1: " + (ln1.snd ? "y < " : "y > ") + ln1.fst[0] + "(x - " + ln1.fst[1] + ") + " + ln1.fst[2]);
-            System.out.println("Line 2: " + (ln2.snd ? "y < " : "y > ") + ln2.fst[0] + "(x - " + ln2.fst[1] + ") + " + ln2.fst[2]);
-            System.out.println("Line 3: " + (ln3.snd ? "y < " : "y > ") + ln3.fst[0] + "(x - " + ln3.fst[1] + ") + " + ln3.fst[2]);
-            System.out.println("Line 4: " + (ln4.snd ? "y < " : "y > ") + ln4.fst[0] + "(x - " + ln4.fst[1] + ") + " + ln4.fst[2]);
             System.out.println("\n");
             return (inequality(ln1, x, y) && inequality(ln2, x, y) && inequality(ln3, x, y) && inequality(ln4, x, y));
         }
@@ -73,8 +81,8 @@ public class SimObject {
                 cxs.add(C.fst);
                 cys.add(C.snd);
             }
-            boolean inX = Collections.max(cxs) > x && x > Collections.min(cxs);
-            boolean inY = Collections.max(cys) > y && y > Collections.min(cys);
+            boolean inX = Collections.max(cxs) >= x && x >= Collections.min(cxs);
+            boolean inY = Collections.max(cys) >= y && y >= Collections.min(cys);
             return (inX && inY);
         }
     }
