@@ -13,8 +13,6 @@ public class SimObject {
     public SimObject() {}
 
     /*TODO:
-    * 1. Clean up this code. Abstract and try to eliminate repetition.
-    * 2. Run lots more tests on 'containsPoint' stuff.
     * 3. Merge 'testing' into 'master'.
     * 4. After testing 'containsPoint', create a new 'collisionMap' class for the rest of collision handling.
     *   collisionMap class:

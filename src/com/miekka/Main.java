@@ -37,8 +37,12 @@ public class Main extends Application
         carTex.add(new ImageView(new Image("file:./res/img/SimcarGreen.png", carSz.fst, carSz.snd, true, false)));
 
         ArrayList<Vehicle> car = new ArrayList<>();
-        car.add(new Vehicle(200,-675,-675,45,carSz));
-        car.add(new Vehicle(55,500,0,135,carSz));
+        //car.add(new Vehicle(200,-675,-675,45,carSz));
+        //car.add(new Vehicle(55,500,0,135,carSz));
+        car.add(new Vehicle(100,500,250,180,carSz));
+        car.add(new Vehicle(100,500,300,180,carSz));
+
+        car.get(0).turn(-30, 1);
 
         new AnimationTimer()
         {
