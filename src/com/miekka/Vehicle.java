@@ -4,11 +4,12 @@ import com.miekka.helper.Pair;
 
 public class Vehicle extends SimObject {
 
-    public Vehicle(double velocity, double xPosition, double yPosition, double initHeading, Pair<Double,Double> sz) {
+    public Vehicle(double velocity, double xPosition, double yPosition, double initHeading, Pair<Double,Double> sz, CollisionMap layer) {
         V = new double[]{velocity,velocity,0};
         H = new double[]{initHeading,initHeading,0};
         P = new Pair<>(xPosition,yPosition);
         Sz = sz;
+        layer.register(this);
     }
 
     private void adjustTo(double[] P) {

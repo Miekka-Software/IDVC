@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Main extends Application
 {
     private final String Title = "IDVC";
-    private final Pair<Integer,Integer> winSize = new Pair<>(500,500);
+    private final Pair<Integer,Integer> winSize = new Pair<>(600,600);
     private final Pair<Double,Double> carSz = new Pair<>(44.0,26.0);
 
     public static void main(String[] args)
@@ -36,30 +36,29 @@ public class Main extends Application
         carTex.add(new ImageView(new Image("file:./res/img/SimcarBlue.png", carSz.fst, carSz.snd, true, false)));
         carTex.add(new ImageView(new Image("file:./res/img/SimcarGreen.png", carSz.fst, carSz.snd, true, false)));
 
+        CollisionMap layer1 = new CollisionMap();
         ArrayList<Vehicle> car = new ArrayList<>();
-        //car.add(new Vehicle(200,-675,-675,45,carSz));
-        //car.add(new Vehicle(55,500,0,135,carSz));
-        car.add(new Vehicle(100,500,250,180,carSz));
-        car.add(new Vehicle(100,500,300,180,carSz));
-
-        car.get(0).turn(-30, 1);
+        car.add(new Vehicle(50,0,300,0,carSz,layer1));
+        car.add(new Vehicle(50,600,300,180,carSz,layer1));
+        car.add(new Vehicle(50,300,0,90,carSz,layer1));
 
         new AnimationTimer()
         {
+            long lastTick = System.currentTimeMillis();
             public void handle(long currentNanoTime)
             {
                 for(Vehicle C : car) {
                     C.updateState();
                 }
-                for(Pair<Double,Double> P : car.get(1).corners()) {
-                    if(car.get(0).containsPoint(P.fst,P.snd)){
-                        this.stop();
+
+                if(System.currentTimeMillis()-lastTick > 250) {
+                    layer1.update();
+                    System.out.print("Colliding figures: ");
+                    for (SimObject O : layer1.checkCollisons()) {
+                        System.out.print(O + ", ");
                     }
-                }
-                for(Pair<Double,Double> P : car.get(0).corners()) {
-                    if(car.get(1).containsPoint(P.fst,P.snd)){
-                        this.stop();
-                    }
+                    System.out.print("\n");
+                    lastTick = System.currentTimeMillis();
                 }
 
                 root.getChildren().clear();

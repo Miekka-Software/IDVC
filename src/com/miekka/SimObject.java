@@ -12,19 +12,6 @@ public class SimObject {
 
     public SimObject() {}
 
-    /*TODO:
-    * 3. Merge 'testing' into 'master'.
-    * 4. After testing 'containsPoint', create a new 'collisionMap' class for the rest of collision handling.
-    *   collisionMap class:
-    *       * Add a collisionMap class that allows the user to "register" vehicles.
-    *       * collisionMap.checkCollide() returns an array. Empty for no collisions, and otherwise contains
-    *         all vehicles involved in the collision.
-    *       * collisionMap is a hashMap datatype that stores all registered cars as the keys, and a boolean
-    *         for collision as the value.
-    *       * Perhaps several smaller local collisionMaps could be used in place of one large one for the
-     *        sake of performance.
-    */
-
     public ArrayList<Pair<Double,Double>> corners() {
         double L = Sz.fst;
         double W = Sz.snd;
@@ -69,7 +56,6 @@ public class SimObject {
             Pair<double[], Boolean> ln2 = pntsToLn(cs.get(1), cs.get(2));
             Pair<double[], Boolean> ln3 = pntsToLn(cs.get(2), cs.get(3));
             Pair<double[], Boolean> ln4 = pntsToLn(cs.get(3), cs.get(0));
-            System.out.println("\n");
             return (inequality(ln1, x, y) && inequality(ln2, x, y) && inequality(ln3, x, y) && inequality(ln4, x, y));
         }
         else {
