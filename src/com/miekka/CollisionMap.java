@@ -4,11 +4,6 @@ import com.miekka.helper.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/*TODO:
- * 1. Document! Comment every block of code and explain its function.
- * 2. AFTER documentation, work on adding sensors to the 'Vehicle' class.
- */
-
 public class CollisionMap {
     HashMap<SimObject,Boolean> objMap;
 

@@ -1,9 +1,17 @@
 package com.miekka;
 
+//Imports:
 import com.miekka.helper.Pair;
 import java.util.ArrayList;
 import java.util.Collections;
 
+//Define the 'SimObject' class.
+//This class holds information pertaining to objects in the simulation; storing things like:
+//  * Position
+//  * Velocity
+//  * Heading (what direction its facing)
+//This class also contains the crucial 'containsPoint' function for testing whether or not a point
+//is inside of the 'SimObject'. This is the basis for collision detection and Vehicle sensors.
 public class SimObject {
     public Pair<Double,Double> Sz;
     public Pair<Double,Double> P;
