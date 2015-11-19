@@ -58,6 +58,9 @@ public class Main extends Application
                         System.out.print(O + ", ");
                     }
                     System.out.print("\n");
+                    if(!layer1.checkCollisons().isEmpty()) {
+                        this.stop();
+                    }
                     lastTick = System.currentTimeMillis();
                 }
 
