@@ -10,19 +10,22 @@ public class Vehicle extends SimObject {
     //'Vehicle' constructor:
     //  1. Sets an initial velocity, position, and heading.
     //  2. Set the size of the vehicle.
-    //  3. Register the new vehicle in the given 'CollisionMap' so its
+    //  3. Set initial texture to texture 0.
+    //  4. Register the new vehicle in the given 'CollisionMap' so its
     //  collisions can be tracked
     public Vehicle(double velocity, double xPosition, double yPosition, double initHeading, Pair<Double,Double> sz, CollisionMap layer) {
         V = new double[]{velocity,velocity,0};
         H = new double[]{initHeading,initHeading,0};
         P = new Pair<>(xPosition,yPosition);
         Sz = sz;
+        Tex = 0;
         layer.register(this);
     }
 
     //Takes an array of 3, [currentValue,targetValue,delta], and gradually moves the current value
     //towards the target by a rate of 'delta' on every call.
-    private void adjustTo(double[] P) {
+    //Returns 'true' if Vehicle is adjusting, and 'false' otherwise.
+    private boolean adjustTo(double[] P) {
         if(P[0] != P[1]) {
             if(P[0] < P[1]) {
                 P[0] += P[2];
@@ -39,13 +42,20 @@ public class Vehicle extends SimObject {
         }
         else {
             P[2] = 0;
+            return false;
         }
+        return true;
     }
 
     //This function updates the "state" of a vehicle. It adjusts the velocity and heading, then moves the vehicle.
+    //Also changes texture if the Vehicle is turning or accelerating.
     public void updateState() {
-        adjustTo(V);
-        adjustTo(H);
+        if(adjustTo(V) || adjustTo(H)) {
+            Tex = 1;
+        }
+        else {
+            Tex = 0;
+        }
         double xv = V[0]/60 * Math.cos(Math.toRadians(H[0]));
         double yv = V[0]/60 * Math.sin(Math.toRadians(H[0]));
         move(xv,yv);

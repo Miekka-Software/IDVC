@@ -13,7 +13,11 @@ import java.util.Collections;
 //This class also contains the crucial 'containsPoint' function for testing whether or not a point
 //is inside of the 'SimObject'. This is the basis for collision detection and Vehicle sensors.
 public class SimObject {
-    //Global class variables:
+    //Stores textural representation for the SimObject.
+    //As of 2015.11.20: 0 = SimcarGreen, 1 = SimcarBlue, 2 = SimcarRed.
+    public int Tex;
+
+    //Other global class variables:
     public Pair<Double,Double> Sz; //Size (xSize,ySize)
     public Pair<Double,Double> P; //Position (xPos,yPos)
     protected double[] V; //Velocity [currentV, targetV, deltaV]
