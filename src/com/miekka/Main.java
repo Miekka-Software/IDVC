@@ -12,9 +12,8 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 
 /*TODO:
- * 1. Document! Comment every block of code and explain its function.
- * 2. AFTER documentation, work on adding sensors to the 'Vehicle' class.
- * 3. Revise turning so the heading and wheel angle are unique values.
+ * 1. AFTER documentation, work on adding sensors to the 'Vehicle' class.
+ * 2. Revise turning so the heading and wheel angle are unique values.
  */
 
 //Main application class, opens a JavaFX window and manages animation.
