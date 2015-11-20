@@ -1,9 +1,13 @@
 package com.miekka;
 
+//Imports:
 import com.miekka.helper.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+//Define the 'CollisionMap' class.
+//This class holds a HashMap of 'SimObjects', and associated Boolean values that indicate whether or
+//not any given Vehicle is involved in a collision.
 public class CollisionMap {
     HashMap<SimObject,Boolean> objMap;
 

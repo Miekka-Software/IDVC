@@ -13,13 +13,16 @@ import java.util.Collections;
 //This class also contains the crucial 'containsPoint' function for testing whether or not a point
 //is inside of the 'SimObject'. This is the basis for collision detection and Vehicle sensors.
 public class SimObject {
-    public Pair<Double,Double> Sz;
-    public Pair<Double,Double> P;
-    protected double[] V;
-    protected double[] H;
+    //Global class variables:
+    public Pair<Double,Double> Sz; //Size (xSize,ySize)
+    public Pair<Double,Double> P; //Position (xPos,yPos)
+    protected double[] V; //Velocity [currentV, targetV, deltaV]
+    protected double[] H; //Heading  [currentH, targetH, deltaH]
 
     public SimObject() {}
 
+    //The 'corners' function returns the 4 corners of the SimObject. It uses trigonometry
+    //to rotate all of the rectangles corners around the center of the figure.
     public ArrayList<Pair<Double,Double>> corners() {
         double L = Sz.fst;
         double W = Sz.snd;
@@ -37,6 +40,7 @@ public class SimObject {
         return c;
     }
 
+    //Takes two points and returns an equation for a line in point-slope form.
     //Note: The "Line" is returned in 3 parts, and is assembled into: y = P1*(x-P2)+P3
     //Also, the Boolean, if true, means y < line, if false, y > line.
     private Pair<double[],Boolean> pntsToLn(Pair<Double,Double> A,Pair<Double,Double> B) {
@@ -48,17 +52,22 @@ public class SimObject {
         return (new Pair<>(ln,abM > P.snd));
     }
 
+    //Takes a line and a point and tests whether or not the point satisfies the inequality.
     private boolean inequality(Pair<double[],Boolean> ln, double x, double y) {
         return (ln.snd ? y <= ln.fst[0] * (x - ln.fst[1]) + ln.fst[2] : y >= ln.fst[0] * (x - ln.fst[1]) + ln.fst[2]);
     }
 
+    //Moves the SimObject by the specified x and y.
     public void move(double mx, double my) {
         P.fst += mx;
         P.snd += my;
     }
 
+    //The all important 'containsPoint' function, determines if the given point is inside of outside of the SimObject
     public boolean containsPoint(double x, double y) {
         ArrayList<Pair<Double, Double>> cs = corners();
+        //If the heading of the vehicle is not 0, 90, 180, 270, 360... use the rotated collision detection algorithm
+        //Otherwise use the traditional Axis-Aligned Bounding Box collision detection method.
         if(H[0] != 0 && H[0] % 90 != 0) {
             Pair<double[], Boolean> ln1 = pntsToLn(cs.get(0), cs.get(1));
             Pair<double[], Boolean> ln2 = pntsToLn(cs.get(1), cs.get(2));
