@@ -11,9 +11,9 @@ public class Vehicle extends SimObject {
     //  1. Sets an initial velocity, position, and heading.
     //  2. Set the size of the vehicle.
     //  3. Set initial texture to texture 0.
-    //  4. Register the new vehicle in the given 'CollisionMap' so its
+    //  4. Register the new vehicle in the given 'SimLayer' so its
     //  collisions can be tracked
-    public Vehicle(double velocity, double xPosition, double yPosition, double initHeading, Pair<Double,Double> sz, CollisionMap layer) {
+    public Vehicle(double velocity, double xPosition, double yPosition, double initHeading, Pair<Double,Double> sz, SimLayer layer) {
         V = new double[]{velocity,velocity,0};
         H = new double[]{initHeading,initHeading,0};
         P = new Pair<>(xPosition,yPosition);

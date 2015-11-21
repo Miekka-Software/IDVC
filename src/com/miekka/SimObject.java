@@ -18,7 +18,7 @@ public class SimObject {
     public int Tex;
 
     //The layer in which this SimObject resides.
-    public CollisionMap Layer;
+    public SimLayer Layer;
 
     //Other global class variables:
     public Pair<Double,Double> Sz; //Size (xSize,ySize)

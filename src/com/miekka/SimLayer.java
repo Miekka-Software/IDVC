@@ -5,15 +5,15 @@ import com.miekka.helper.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-//Define the 'CollisionMap' class.
+//Define the 'SimLayer' class.
 //This class holds a HashMap of 'SimObjects', and associated Boolean values that indicate whether or
 //not any given Vehicle is involved in a collision.
-public class CollisionMap {
+public class SimLayer {
     //Declare HashMap to keep track of all registered SimObjects.
     private HashMap<SimObject,Boolean> objMap;
 
     //Initialize HashMap
-    public CollisionMap() {
+    public SimLayer() {
         objMap = new HashMap<>();
     }
 
