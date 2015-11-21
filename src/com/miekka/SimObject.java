@@ -17,6 +17,9 @@ public class SimObject {
     //As of 2015.11.20: 0 = SimcarGreen, 1 = SimcarBlue, 2 = SimcarRed.
     public int Tex;
 
+    //The layer in which this SimObject resides.
+    public CollisionMap Layer;
+
     //Other global class variables:
     public Pair<Double,Double> Sz; //Size (xSize,ySize)
     public Pair<Double,Double> P; //Position (xPos,yPos)

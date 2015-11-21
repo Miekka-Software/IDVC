@@ -12,8 +12,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 
 /*TODO:
- * 1. AFTER documentation, work on adding sensors to the 'Vehicle' class.
- * 2. Revise turning so the heading and wheel angle are unique values.
+ * 1. Revise turning so the heading and wheel angle are unique values.
  */
 
 //Main application class, opens a JavaFX window and manages animation.
@@ -55,11 +54,9 @@ public class Main extends Application
 
         //Create an 'ArrayList' of Vehicles, then add all of the Vehicle objects.
         ArrayList<Vehicle> car = new ArrayList<>();
-        car.add(new Vehicle(50,0,300,0,carSz,layer1));
-        car.add(new Vehicle(50,600,300,180,carSz,layer1));
-        car.add(new Vehicle(50,300,0,90,carSz,layer1));
-
-        car.get(1).accelerate(50,13);
+        car.add(new Vehicle(35,0,300,0,carSz,layer1));
+        car.add(new Vehicle(30,100,300,0,carSz,layer1));
+        //car.add(new Vehicle(50,300,0,90,carSz,layer1));
 
         //Create a new 'AnimationTimer' (because 'AnimationTimer' is an abstract class, we extend it inline).
         //In 'AnimationTimer' we implement 'handle' which runs 60 times a second, and animates the Stage.
@@ -87,9 +84,11 @@ public class Main extends Application
                     //Print all colliding objects.
                     System.out.print("Colliding figures: ");
                     for (SimObject O : layer1.checkCollisons()) {
-                        System.out.print(O + ", ");
+                        System.out.print(O + " ");
                     }
-                    System.out.print("\n");
+
+                    //Print sensor reading of car 2.
+                    System.out.println("\nDist: " + (car.get(1).senseDist(180,1,500)-22));
 
                     //If any objects are colliding, change their textures & stop the simulation.
                     if(!layer1.checkCollisons().isEmpty()) {

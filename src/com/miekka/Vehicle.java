@@ -19,7 +19,8 @@ public class Vehicle extends SimObject {
         P = new Pair<>(xPosition,yPosition);
         Sz = sz;
         Tex = 0;
-        layer.register(this);
+        Layer = layer;
+        Layer.register(this);
     }
 
     //Takes an array of 3, [currentValue,targetValue,delta], and gradually moves the current value
@@ -50,15 +51,43 @@ public class Vehicle extends SimObject {
     //This function updates the "state" of a vehicle. It adjusts the velocity and heading, then moves the vehicle.
     //Also changes texture if the Vehicle is turning or accelerating.
     public void updateState() {
-        if(adjustTo(V) || adjustTo(H)) {
-            Tex = 1;
-        }
-        else {
-            Tex = 0;
-        }
+        if(adjustTo(V) || adjustTo(H)) { Tex = 1; }
+        else { Tex = 0; }
         double xv = V[0]/60 * Math.cos(Math.toRadians(H[0]));
         double yv = V[0]/60 * Math.sin(Math.toRadians(H[0]));
         move(xv,yv);
+    }
+
+    //'senseDist' returns the distance to the nearest SimObject at the relative angle 'angle'.
+    //This function works by moving a point along a sensor line until it either goes out of range,
+    //or collides with another SimObject in this Layer. The function then returns the distance from
+    //the center of this SimObject to the point.
+    public double senseDist(double angle, double precision, double maxRange) {
+        //Local variables:
+        double distance = 0; //Distance from the point to the center of this SimObject.
+        double adjAngle = H[0] + angle; //Absolute sensor heading.
+        boolean detected = false; //Is the point colliding with another figure?
+
+        //If 'detected' is false, and distance has not exceeded its max, move the point and test for collisions.
+        while(!detected && distance < maxRange) {
+
+            //Update distance and find the new point.
+            distance += precision;
+            double pointX = (Math.cos(Math.toRadians(adjAngle)) * distance) + P.fst;
+            double pointY = (Math.sin(Math.toRadians(adjAngle)) * distance) + P.snd;
+
+            //Check all SimObjects (excluding this one) for collisions with the point.
+            //If there is one, update 'detected' to 'true'.
+            for(SimObject obj : Layer.members()) {
+                if(obj != this) {
+                    if (obj.containsPoint(pointX, pointY)) {
+                        detected = true;
+                    }
+                }
+            }
+        }
+        //Return the accumulated distance.
+        return distance;
     }
 
     //This function takes a target velocity and a delta, then sets these values in the velocity array.

@@ -10,7 +10,7 @@ import java.util.HashMap;
 //not any given Vehicle is involved in a collision.
 public class CollisionMap {
     //Declare HashMap to keep track of all registered SimObjects.
-    HashMap<SimObject,Boolean> objMap;
+    private HashMap<SimObject,Boolean> objMap;
 
     //Initialize HashMap
     public CollisionMap() {
@@ -28,8 +28,8 @@ public class CollisionMap {
     //whether or not they are inside any of the other figures. If one object's corners intersects with
     //another objects's hit-box, change both objects' value to true. True indicates a collision.
     public void update() {
+        objMap.replaceAll((k, v) -> false);
         for(SimObject obj1 : objMap.keySet()) {
-            objMap.replace(obj1,false);
             for(SimObject obj2 : objMap.keySet()) {
                 if(obj2 != obj1) {
                     for(Pair<Double,Double> obj2Pnts : obj2.corners()) {
@@ -55,4 +55,11 @@ public class CollisionMap {
         return cObjs;
     }
 
+    public ArrayList<SimObject> members() {
+        ArrayList<SimObject> mbrs = new ArrayList<>();
+        for(SimObject obj : objMap.keySet()) {
+            mbrs.add(obj);
+        }
+        return mbrs;
+    }
 }
