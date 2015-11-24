@@ -69,8 +69,8 @@ public class Main extends Application
 
         //Create an 'ArrayList' of Vehicles, then add all of the Vehicle objects.
         ArrayList<Vehicle> car = new ArrayList<>();
-        car.add(new Vehicle(35,0,300,0,carSz,layer1));
-        car.add(new Vehicle(30,100,300,0,carSz,layer1));
+        car.add(new Vehicle(30,0,300,0,carSz,layer1));
+        car.add(new Vehicle(30,600,300,180,carSz,layer1));
         //car.add(new Vehicle(50,300,0,90,carSz,layer1));
 
         //Create a new 'AnimationTimer' (because 'AnimationTimer' is an abstract class, we extend it inline).
@@ -88,7 +88,7 @@ public class Main extends Application
             {
                 //Update the state of all of the Vehicles in the simulation.
                 for(Vehicle C : car) {
-                    C.updateState();
+                    C.nextTick();
                 }
 
                 //If the last tick was more than a 10th of a second ago, it is time for the next tick.
@@ -103,7 +103,7 @@ public class Main extends Application
                     }
 
                     //Print sensor reading of car 2.
-                    System.out.println("\nDist: " + (car.get(1).senseDist(180,1,500)-22));
+                    System.out.println("\nDist: " + car.get(1).senseDist(0,1,500));
 
                     //If any objects are colliding, change their textures & stop the simulation.
                     if(!layer1.checkCollisons().isEmpty()) {

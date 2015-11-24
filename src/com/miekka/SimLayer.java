@@ -44,22 +44,23 @@ public class SimLayer {
         }
     }
 
-    //This function filters through the whole HashMap and returns all objects with a value of 'true'.
-    public ArrayList<SimObject> checkCollisons(){
-        ArrayList<SimObject> cObjs = new ArrayList<>();
-        for(SimObject obj : objMap.keySet()) {
-            if(objMap.get(obj)) {
-                cObjs.add(obj);
-            }
-        }
-        return cObjs;
-    }
-
+    //This function filters through the whole HashMap and returns all SimObjects (the keys).
     public ArrayList<SimObject> members() {
         ArrayList<SimObject> mbrs = new ArrayList<>();
         for(SimObject obj : objMap.keySet()) {
             mbrs.add(obj);
         }
         return mbrs;
+    }
+
+    //This function filters through the whole HashMap and returns all SimObjects with a value of 'true'.
+    public ArrayList<SimObject> checkCollisons(){
+        ArrayList<SimObject> cObjs = new ArrayList<>();
+        for(SimObject obj : members()) {
+            if(objMap.get(obj)) {
+                cObjs.add(obj);
+            }
+        }
+        return cObjs;
     }
 }

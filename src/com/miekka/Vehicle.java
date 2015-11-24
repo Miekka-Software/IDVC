@@ -48,9 +48,9 @@ public class Vehicle extends SimObject {
         return true;
     }
 
-    //This function updates the "state" of a vehicle. It adjusts the velocity and heading, then moves the vehicle.
+    //This function updates the state of a vehicle. It adjusts the velocity and heading, then moves the vehicle.
     //Also changes texture if the Vehicle is turning or accelerating.
-    public void updateState() {
+    public void nextTick() {
         if(adjustTo(V) || adjustTo(H)) { Tex = 1; }
         else { Tex = 0; }
         double xv = V[0]/60 * Math.cos(Math.toRadians(H[0]));
