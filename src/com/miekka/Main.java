@@ -12,8 +12,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 
 /*TODO:
- * 1. Revise turning so the heading and wheel angle are unique values.
- * 2. Outline and implement communication between Vehicles:
+ * 1. Outline and implement communication between Vehicles:
  *      * Use queues for pending IO
  *      * If a Vehicle_1's sensor can "see" another Vehicle (Vehicle_2), it can be pinged. If Vehicle_2 pings back,
  *        Vehicle_2 is added is added to Vehicle_1's 'idvcContacts' and visa-versa.
@@ -33,8 +32,7 @@ import java.util.ArrayList;
 //Main application class, opens a JavaFX window and manages animation.
 public class Main extends Application
 {
-    //Define constants for window title, window size and car size.
-    private final String Title = "IDVC";
+    //Define constants for window size and car size.
     private final Pair<Integer,Integer> winSize = new Pair<>(600,600);
     private final Pair<Double,Double> carSz = new Pair<>(44.0,26.0);
 
@@ -50,7 +48,7 @@ public class Main extends Application
     public void start(Stage theStage)
     {
         //Set the stage with a Scene, and set window attributes.
-        theStage.setTitle(Title);
+        theStage.setTitle("IDVC (Intelligent Distributed Vehicle Control)");
         Group root = new Group();
         Scene theScene = new Scene(root);
         theStage.setScene(theScene);
@@ -60,29 +58,32 @@ public class Main extends Application
         //Create an 'ArrayList' containing all of the car sprites. Sprites are stored in JavaFX 'ImageView'.
         //The images are resized to match 'carSz'.
         ArrayList<Image> carTex = new ArrayList<>();
-        carTex.add(new Image("file:./res/img/SimcarGreen.png", carSz.fst, carSz.snd, true, false));
-        carTex.add(new Image("file:./res/img/SimcarBlue.png", carSz.fst, carSz.snd, true, false));
-        carTex.add(new Image("file:./res/img/SimcarRed.png", carSz.fst, carSz.snd, true, false));
+        carTex.add(new Image("img/SimcarGreen.png", carSz.fst, carSz.snd, false, false));
+        carTex.add(new Image("img/SimcarBlue.png", carSz.fst, carSz.snd, false, false));
+        carTex.add(new Image("img/SimcarRed.png", carSz.fst, carSz.snd, false, false));
 
         //Create a collision layer to keep track of colliding objects.
         SimLayer layer1 = new SimLayer();
 
         //Create an 'ArrayList' of Vehicles, then add all of the Vehicle objects.
         ArrayList<Vehicle> car = new ArrayList<>();
-        car.add(new Vehicle(30,0,300,0,carSz,layer1));
-        car.add(new Vehicle(30,600,300,180,carSz,layer1));
-        //car.add(new Vehicle(50,300,0,90,carSz,layer1));
+        car.add(new Vehicle(40,0,0,45,carSz,layer1));
+        car.add(new Vehicle(40,300,0,90,carSz,layer1));
+        car.add(new Vehicle(40,600,0,135,carSz,layer1));
+        car.add(new Vehicle(60,600,300,180,carSz,layer1));
+        car.add(new Vehicle(40,600,600,-135,carSz,layer1));
+        car.add(new Vehicle(40,300,600,-90,carSz,layer1));
+        car.add(new Vehicle(40,0,600,-45,carSz,layer1));
+        car.add(new Vehicle(60,0,300,0,carSz,layer1));
+
+        for(Vehicle C : car){
+            C.stop(2.5);
+        }
 
         //Create a new 'AnimationTimer' (because 'AnimationTimer' is an abstract class, we extend it inline).
         //In 'AnimationTimer' we implement 'handle' which runs 60 times a second, and animates the Stage.
         new AnimationTimer()
         {
-            //Get the current time (starting time) in milliseconds.
-            long lastTick = System.currentTimeMillis();
-
-            //This variable stops the simulation if it is changed to true.
-            boolean stop = false;
-
             //Animation loop
             public void handle(long currentNanoTime)
             {
@@ -91,30 +92,12 @@ public class Main extends Application
                     C.nextTick();
                 }
 
-                //If the last tick was more than a 10th of a second ago, it is time for the next tick.
-                if(System.currentTimeMillis()-lastTick > 100) {
-                    //Update the collision layer
-                    layer1.update();
+                //Update the collision layer.
+                layer1.update();
 
-                    //Print all colliding objects.
-                    System.out.print("Colliding figures: ");
-                    for (SimObject O : layer1.checkCollisons()) {
-                        System.out.print(O + " ");
-                    }
-
-                    //Print sensor reading of car 2.
-                    System.out.println("\nDist: " + car.get(1).senseDist(0,1,500));
-
-                    //If any objects are colliding, change their textures & stop the simulation.
-                    if(!layer1.checkCollisons().isEmpty()) {
-                        for(SimObject C : layer1.checkCollisons()) {
-                            C.Tex = 2;
-                        }
-                        stop = true;
-                    }
-
-                    //Update the time of the last tick to now.
-                    lastTick = System.currentTimeMillis();
+                //Freeze all colliding objects.
+                for (SimObject O : layer1.checkCollisons()) {
+                    O.freeze();
                 }
 
                 //Clear the scene (wipe the screen).
@@ -128,11 +111,6 @@ public class Main extends Application
                     cT.setY((C.getY() - carSz.snd / 2));
                     cT.setRotate(C.getH());
                     root.getChildren().add(cT);
-                }
-
-                //Check to see if the 'stop' variable has been triggered. If it has, stop the simulation.
-                if(stop) {
-                    this.stop();
                 }
             }
         }.start();

@@ -1,12 +1,12 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="IDVC:jar">
+  <artifact type="jar" build-on-make="true" name="IDVC:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/IDVC_jar</output-path>
     <root id="archive" name="IDVC.jar">
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
         <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
       </element>
       <element id="module-output" name="IDVC" />
+      <element id="dir-copy" path="$PROJECT_DIR$/res" />
     </root>
   </artifact>
 </component>

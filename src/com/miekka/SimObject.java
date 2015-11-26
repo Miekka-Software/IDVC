@@ -13,24 +13,27 @@ import java.util.Collections;
 //This class also contains the crucial 'containsPoint' function for testing whether or not a point
 //is inside of the 'SimObject'. This is the basis for collision detection and Vehicle sensors.
 public class SimObject {
-    //Stores textural representation for the SimObject.
-    //As of 2015.11.20: 0 = SimcarGreen, 1 = SimcarBlue, 2 = SimcarRed.
-    public int Tex;
+    //Stores the index of a textural representation for the SimObject.
+    //As of 2015.11.20: 0 = SimcarGreen (Default), 1 = SimcarBlue (Changing State), 2 = SimcarRed (Frozen).
+    protected int Tex;
 
     //The layer in which this SimObject resides.
-    public SimLayer Layer;
+    protected SimLayer Layer;
+
+    //Boolean that determines whether or not an object should be updated.
+    protected boolean IsAnimated;
 
     //Other global class variables:
-    public Pair<Double,Double> Sz; //Size (xSize,ySize)
-    public Pair<Double,Double> P; //Position (xPos,yPos)
+    protected Pair<Double,Double> Sz; //Size (xSize,ySize)
+    protected Pair<Double,Double> P; //Position (xPos,yPos)
     protected double[] V; //Velocity [currentV, targetV, deltaV]
     protected double[] H; //Heading  [currentH, targetH, deltaH]
 
-    public SimObject() {}
+    protected SimObject() {}
 
     //The 'corners' function returns the 4 corners of the SimObject. It uses trigonometry
     //to rotate all of the rectangles corners around the center of the figure.
-    public ArrayList<Pair<Double,Double>> corners() {
+    protected ArrayList<Pair<Double,Double>> corners() {
         double L = Sz.fst;
         double W = Sz.snd;
         double hyp = Math.sqrt(Math.pow(L/2,2) + Math.pow(W/2,2));
@@ -64,12 +67,6 @@ public class SimObject {
         return (ln.snd ? y <= ln.fst[0] * (x - ln.fst[1]) + ln.fst[2] : y >= ln.fst[0] * (x - ln.fst[1]) + ln.fst[2]);
     }
 
-    //Moves the SimObject by the specified x and y.
-    public void move(double mx, double my) {
-        P.fst += mx;
-        P.snd += my;
-    }
-
     //The all important 'containsPoint' function, determines if the given point is inside of outside of the SimObject
     public boolean containsPoint(double x, double y) {
         ArrayList<Pair<Double, Double>> cs = corners();
@@ -93,5 +90,17 @@ public class SimObject {
             boolean inY = Collections.max(cys) >= y && y >= Collections.min(cys);
             return (inX && inY);
         }
+    }
+
+    //Moves the SimObject by the specified x and y.
+    public void move(double mx, double my) {
+        P.fst += mx;
+        P.snd += my;
+    }
+
+    //Sets the 'IsAnimated' value to false "freezing" the object and preventing it from updating.
+    public void freeze() {
+        IsAnimated = false;
+        Tex = 2; //2 = "Frozen" texture.
     }
 }

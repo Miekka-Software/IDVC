@@ -11,14 +11,15 @@ public class Vehicle extends SimObject {
     //  1. Sets an initial velocity, position, and heading.
     //  2. Set the size of the vehicle.
     //  3. Set initial texture to texture 0.
-    //  4. Register the new vehicle in the given 'SimLayer' so its
-    //  collisions can be tracked
-    public Vehicle(double velocity, double xPosition, double yPosition, double initHeading, Pair<Double,Double> sz, SimLayer layer) {
+    //  4. Defaults the 'IsAnimated' value to true.
+    //  5. Register the new vehicle in the given 'SimLayer' so its collisions can be tracked.
+    public Vehicle(double velocity, double xPosition, double yPosition, double initHeading, Pair<Double,Double> size, SimLayer layer) {
         V = new double[]{velocity,velocity,0};
         H = new double[]{initHeading,initHeading,0};
         P = new Pair<>(xPosition,yPosition);
-        Sz = sz;
+        Sz = size;
         Tex = 0;
+        IsAnimated = true;
         Layer = layer;
         Layer.register(this);
     }
@@ -51,11 +52,18 @@ public class Vehicle extends SimObject {
     //This function updates the state of a vehicle. It adjusts the velocity and heading, then moves the vehicle.
     //Also changes texture if the Vehicle is turning or accelerating.
     public void nextTick() {
-        if(adjustTo(V) || adjustTo(H)) { Tex = 1; }
-        else { Tex = 0; }
-        double xv = V[0]/60 * Math.cos(Math.toRadians(H[0]));
-        double yv = V[0]/60 * Math.sin(Math.toRadians(H[0]));
-        move(xv,yv);
+        if(IsAnimated) {
+            boolean dvp = adjustTo(V);
+            boolean dhp = adjustTo(H);
+            if (dvp || dhp) {
+                Tex = 1; //2 = "Changing State" texture.
+            } else {
+                Tex = 0; //0 = "Default" texture.
+            }
+            double xv = getV() / 60 * Math.cos(Math.toRadians(getH()));
+            double yv = getV() / 60 * Math.sin(Math.toRadians(getH()));
+            move(xv, yv);
+        }
     }
 
     //'senseDist' returns the distance to the nearest SimObject at the relative angle 'angle'.
