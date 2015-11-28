@@ -3,6 +3,8 @@ package com.miekka;
 //Imports:
 import com.miekka.helper.Pair;
 
+import java.util.UUID;
+
 //Define the Vehicle class.
 //It extends the 'SimObject' class, and adds functionality for driving the vehicle.
 public class Vehicle extends SimObject {
@@ -12,7 +14,8 @@ public class Vehicle extends SimObject {
     //  2. Set the size of the vehicle.
     //  3. Set initial texture to texture 0.
     //  4. Defaults the 'IsAnimated' value to true.
-    //  5. Register the new vehicle in the given 'SimLayer' so its collisions can be tracked.
+    //  5. Generate a random UUID used to identify the Vehicle.
+    //  6. Register the new vehicle in the given 'SimLayer' so its collisions can be tracked.
     public Vehicle(double velocity, double xPosition, double yPosition, double initHeading, Pair<Double,Double> size, SimLayer layer) {
         V = new double[]{velocity,velocity,0};
         H = new double[]{initHeading,initHeading,0};
@@ -20,6 +23,7 @@ public class Vehicle extends SimObject {
         Sz = size;
         Tex = 0;
         IsAnimated = true;
+        ID = UUID.randomUUID().toString();
         Layer = layer;
         Layer.register(this);
     }

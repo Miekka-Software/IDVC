@@ -53,6 +53,16 @@ public class SimLayer {
         return mbrs;
     }
 
+    //This function takes a UUID and returns an object from the SimLayer with that ID (if any).
+    public SimObject lookup(String id) {
+        for(SimObject obj : members()) {
+            if(obj.getID().equals(id)) {
+                return obj;
+            }
+        }
+        return null;
+    }
+
     //This function filters through the whole HashMap and returns all SimObjects with a value of 'true'.
     public ArrayList<SimObject> checkCollisons(){
         ArrayList<SimObject> cObjs = new ArrayList<>();
