@@ -13,7 +13,7 @@ public class Node {
         this.Position = pos;
         this.Velocity = v;
         this.Heading = h;
-        this.LastUpdate = System.currentTimeMillis();
+        this.LastUpdate = System.nanoTime();
     }
 
     public String getID() {
@@ -40,14 +40,14 @@ public class Node {
         this.Position = newPosition;
         this.Velocity = newVelocity;
         this.Heading = newHeading;
-        this.LastUpdate = System.currentTimeMillis();
+        this.LastUpdate = System.nanoTime();
     }
 
-    public String showNode() {
+    public String show() {
         return (String.join("\n",
                             "Information for node " + this.ID + ":",
                             "\tPosition: " + this.Position.show(),
-                            "\tTime of last update (millis): " + this.LastUpdate,
+                            "\tTime of last update (nanos): " + this.LastUpdate,
                             "\tCurrent Velocity: " + this.Velocity[0],
                             "\tTarget Velocity: " + this.Velocity[1],
                             "\tDelta Velocity (Acceleration): " + this.Velocity[2],
