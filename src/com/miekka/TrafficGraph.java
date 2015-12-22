@@ -5,7 +5,6 @@ import com.miekka.helper.Node;
 import com.miekka.helper.Pair;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class TrafficGraph {
@@ -25,7 +24,7 @@ public class TrafficGraph {
     }
 
     public void addNode(SimObject templateObj, Pair<Double,Double> position) {
-        Node newNode = new Node(templateObj.getID(), position, templateObj.V, templateObj.H);
+        Node newNode = new Node(templateObj.getID(), position, templateObj.getV(), templateObj.getH());
         NodeList.add(newNode);
     }
 
@@ -33,10 +32,16 @@ public class TrafficGraph {
         NodeList.add(newNode);
     }
 
-    public List<Node> lookupNode(String id) {
+    public Node lookupNode(String id) {
         //Java 8 stream and lambda witchcraft. Filters the NodeList and returns all Nodes with the correct id,
-        //then collects those values into a list, and finally, pulls the first element.
-        return (NodeList.stream().filter(o -> o.getID().equals(id)).collect(Collectors.toList()));
+        //then collects those values into a list, and finally, pulls the first element. If the list is empty
+        //(meaning to matches were found), then catch the exception and return null.
+        try {
+            return (NodeList.stream().filter(o -> o.getID().equals(id)).collect(Collectors.toList()).get(0));
+        }
+        catch (IndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
     public Node getOrigin() {
@@ -45,36 +50,74 @@ public class TrafficGraph {
     }
 
     public ArrayList<Node> getNodeList() {
-        return NodeList;
+        ArrayList<Node> newNL = new ArrayList<>();
+        for(Node n : NodeList) {
+            newNL.add(new Node(n));
+        }
+        return newNL;
     }
 
-    public void updateNodeWithID(String id, Pair<Double,Double> newPosition, double[] newVelocity, double[] newHeading) {
-        Node targetNode = lookupNode(id).get(0);
-        targetNode.updateNode(newPosition,newVelocity,newHeading);
+    public void updateNodeStatus(String id, double[] newVelocity, double[] newHeading) {
+        Node targetNode = lookupNode(id);
+        if (targetNode != null) {
+            targetNode.updateNode(targetNode.getPosition(), newVelocity, newHeading);
+        }
+        else {
+            System.out.println("Lookup for node '" + id + "' failed.");
+        }
+    }
+
+    public void updateNodePosition(String id, Pair<Double,Double> newPosition) {
+        Node targetNode = lookupNode(id);
+        if (targetNode != null) {
+            targetNode.updateNode(newPosition, targetNode.getVelocity(), targetNode.getHeading());
+        }
+        else {
+            System.out.println("Lookup for node '" + id + "' failed.");
+        }
     }
 
     public void removeNode(String id) {
-        Node targetNode = lookupNode(id).get(0);
-        NodeList.remove(targetNode);
+        Node targetNode = lookupNode(id);
+        if (targetNode != null) {
+            NodeList.remove(targetNode);
+        }
+        else {
+            System.out.println("Lookup for node '" + id + "' failed.");
+        }
     }
 
     public void shiftOrigin(String newOriginID) {
-        Pair<Double,Double> graphShift = this.lookupNode(newOriginID).get(0).getPosition();
-        for(Node node : NodeList) {
-            Pair<Double,Double> newPos =
-                new Pair<>(node.getPosition().fst - graphShift.fst, node.getPosition().snd - graphShift.snd);
-            node.updateNode(newPos, node.getVelocity(), node.getHeading());
+        Node newOrigin = this.lookupNode(newOriginID);
+        if (newOrigin != null) {
+            Pair<Double, Double> graphShift = newOrigin.getPosition();
+            for (Node node : NodeList) {
+                Pair<Double, Double> newPos =
+                        new Pair<>(node.getPosition().fst - graphShift.fst, node.getPosition().snd - graphShift.snd);
+                node.updateNode(newPos, node.getVelocity(), node.getHeading());
+            }
+        }
+        else {
+            System.out.println("Lookup for node '" + newOriginID + "' failed.");
         }
     }
 
     /*
     * This function needs to be finished, it merges newer changes from a remote TG into the local one
     * Write so it can handle failed lookups (new nodes in the remote). Also, modify all functions to handle failed
-    * lookups with the new List<Node> return type of lookupNode. Empty list means no results found.
-
+    * lookups with the null return of lookupNode. Null means no results found.
+    */
     public void syncWith(TrafficGraph remoteTG) {
         for(Node remoteNode : remoteTG.getNodeList()) {
-            if(remoteNode.)
+            Node localNode = this.lookupNode(remoteNode.getID());
+            if(localNode != null) {
+                if(remoteNode.getLastUpdate() > localNode.getLastUpdate()) {
+                    localNode.updateNode(remoteNode.getPosition(), remoteNode.getVelocity(), remoteNode.getHeading());
+                }
+            }
+            else {
+                this.addNode(remoteNode);
+            }
         }
-    }*/
+    }
 }

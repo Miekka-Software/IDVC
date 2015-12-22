@@ -2,6 +2,7 @@ package com.miekka.helper;
 
 public class Node {
     private String ID;
+    //private Pair<Double,Double> Size; ?
     private Pair<Double,Double> Position;
     private long LastUpdate;
     private double[] Velocity;
@@ -14,6 +15,14 @@ public class Node {
         this.Velocity = v;
         this.Heading = h;
         this.LastUpdate = System.nanoTime();
+    }
+
+    public Node(Node n) {
+        this.ID = n.getID();
+        this.Position = n.getPosition();
+        this.Velocity = n.getVelocity();
+        this.Heading = n.getHeading();
+        this.LastUpdate = n.getLastUpdate();
     }
 
     public String getID() {
@@ -38,8 +47,8 @@ public class Node {
 
     public void updateNode(Pair<Double,Double> newPosition, double[] newVelocity, double[] newHeading) {
         this.Position = newPosition;
-        this.Velocity = newVelocity;
-        this.Heading = newHeading;
+        this.Velocity = newVelocity.clone();
+        this.Heading = newHeading.clone();
         this.LastUpdate = System.nanoTime();
     }
 
@@ -50,10 +59,10 @@ public class Node {
                             "\tTime of last update (nanos): " + this.LastUpdate,
                             "\tCurrent Velocity: " + this.Velocity[0],
                             "\tTarget Velocity: " + this.Velocity[1],
-                            "\tDelta Velocity (Acceleration): " + this.Velocity[2],
+                            "\tDelta Velocity (Acceleration): " + this.Velocity[2] * 60,
                             "\tCurrent Heading: " + this.Heading[0],
                             "\tTarget Heading: " + this.Heading[1],
-                            "\tDelta Heading (Turning Speed): " + this.Heading[2]));
+                            "\tDelta Heading (Turning Speed): " + this.Heading[2] * 60));
     }
 
 }

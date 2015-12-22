@@ -64,8 +64,8 @@ public class Vehicle extends SimObject {
             } else {
                 Tex = 0; //0 = "Default" texture.
             }
-            double xv = getV() / 60 * Math.cos(Math.toRadians(getH()));
-            double yv = getV() / 60 * Math.sin(Math.toRadians(getH()));
+            double xv = getVelocity() / 60 * Math.cos(Math.toRadians(getHeading()));
+            double yv = getVelocity() / 60 * Math.sin(Math.toRadians(getHeading()));
             move(xv, yv);
         }
     }
@@ -111,7 +111,7 @@ public class Vehicle extends SimObject {
 
     //This is a shortcut function for stopping the vehicle.
     public void stop(double dv) {
-        accelerate(-getV(),dv);
+        accelerate(-getVelocity(),dv);
     }
 
     //This function takes a target heading and a delta, then sets these values in the heading array.
@@ -124,28 +124,23 @@ public class Vehicle extends SimObject {
     //Simple functions for returning information about the vehicle:
 
     //Velocity
-    public double getV() {
+    public double getVelocity() {
         return V[0];
     }
     //Acceleration
-    public double getA() {
+    public double getAcceleration() {
         return V[2]*60;
     }
     //Heading
-    public double getH() {
+    public double getHeading() {
         return H[0];
     }
-    //X coordinate
+    //X screen-coordinate
     public double getX() {
         return P.fst;
     }
-    //Y coordinate
+    //Y screen-coordinate
     public double getY() {
         return P.snd;
     }
-    //Returns: "(X,Y)"
-    public String showPos() {
-        return P.show();
-    }
-
 }

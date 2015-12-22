@@ -30,8 +30,8 @@ public class SimObject {
     //Other global class variables:
     protected Pair<Double,Double> Sz; //Size (xSize,ySize)
     protected Pair<Double,Double> P; //Position (xPos,yPos)
-    protected double[] V; //Velocity [currentV, targetV, deltaV]
-    protected double[] H; //Heading  [currentH, targetH, deltaH]
+    public double[] V; //Velocity [currentV, targetV, deltaV]
+    public double[] H; //Heading  [currentH, targetH, deltaH]
 
     protected SimObject() {}
 
@@ -99,6 +99,14 @@ public class SimObject {
     //Returns the UUID of the SimObject
     public String getID() {
         return ID;
+    }
+
+    public double[] getV() {
+        return V.clone();
+    }
+
+    public double[] getH() {
+        return H.clone();
     }
 
     //Moves the SimObject by the specified x and y.

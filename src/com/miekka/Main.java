@@ -109,7 +109,7 @@ public class Main extends Application
                     ImageView cT = new ImageView(carTex.get(C.Tex));
                     cT.setX((C.getX() - carSz.fst / 2));
                     cT.setY((C.getY() - carSz.snd / 2));
-                    cT.setRotate(C.getH());
+                    cT.setRotate(C.getHeading());
                     root.getChildren().add(cT);
                 }
             }
