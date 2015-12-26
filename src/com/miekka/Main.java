@@ -12,22 +12,10 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 
 /*TODO:
- * 1. Outline and implement communication between Vehicles:
- *      * Use queues for pending IO
- *      * If a Vehicle_1's sensor can "see" another Vehicle (Vehicle_2), it can be pinged. If Vehicle_2 pings back,
- *        Vehicle_2 is added is added to Vehicle_1's 'idvcContacts' and visa-versa.
- *      * If Vehicle_2 leaves Vehicle_1's sensor range, Vehicle_2 is deleted from Vehicle_1's contacts.
- *      * When further communication is required, the Vehicles can communicate directly via their contacts.
- *      * If a sensed object fails to respond to the ping, it is added to a separate 'trackedObjects' list. Land
- *        obstacles, traffic control objects (road cones, etc.), and non-IDVC Vehicles all fall into this category.
- *      * When information is pertinent to all Vehicles in traffic, a 'rippleMessage' is sent out. Ripple messages
- *        have priority over all other messages, and every vehicle that receives this message sends a copy of it to
- *        all of its IDVC contacts. The information ripples through the network, spreading at an exponential rate
- *        outwards from the source (hence the name).
- *      * Every vehicle stores its received messages in memory for future reference.
- *      * If a vehicle receives a duplicate ripple message, it ignores it and does not forward it a second time. This
- *        way, ripple messages don't flood the network, and once everyone has received the message, it dies out.
- */
+* 1. Test and experiment with the sharing and displaying of Traffic Graphs
+* 2. After Traffic Graphs are bulletproofed, merge testing into master
+* 3. Add GUI panel for displaying Traffic Graphs?
+*/
 
 //Main application class, opens a JavaFX window and manages animation.
 public class Main extends Application

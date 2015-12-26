@@ -1,21 +1,27 @@
 package com.miekka;
 
 //Imports:
+import com.miekka.helper.Node;
 import com.miekka.helper.Pair;
 
+import java.util.ArrayList;
 import java.util.UUID;
+import java.util.function.DoubleToLongFunction;
 
 //Define the Vehicle class.
 //It extends the 'SimObject' class, and adds functionality for driving the vehicle.
 public class Vehicle extends SimObject {
+    private ArrayList<String> ObjContacts;
+    public TrafficGraph LocalTG; //Defines a TrafficGraph to be stored locally on the Vehicle
 
     //'Vehicle' constructor:
-    //  1. Sets an initial velocity, position, and heading.
+    //  1. Sets an initial velocity, position, heading, and traffic graph.
     //  2. Set the size of the vehicle.
     //  3. Set initial texture to texture 0.
-    //  4. Defaults the 'IsAnimated' value to true.
+    //  4. Default the 'IsAnimated' and 'IDVCCompat' values to true.
     //  5. Generate a random UUID used to identify the Vehicle.
-    //  6. Register the new vehicle in the given 'SimLayer' so its collisions can be tracked.
+    //  6. Initialize contacts with an initial sensor sweep.
+    //  7. Register the new vehicle in the given 'SimLayer' so its collisions can be tracked.
     public Vehicle(double velocity, double xPosition, double yPosition, double initHeading, Pair<Double,Double> size, SimLayer layer) {
         V = new double[]{velocity,velocity,0};
         H = new double[]{initHeading,initHeading,0};
@@ -23,7 +29,12 @@ public class Vehicle extends SimObject {
         Sz = size;
         Tex = 0;
         IsAnimated = true;
+        IDVCCompat = true;
         ID = UUID.randomUUID().toString();
+        ObjContacts = new ArrayList<>();
+        ArrayList<Node> initTG = new ArrayList<>();
+        initTG.add(new Node(ID,P,V,H));
+        LocalTG = new TrafficGraph(initTG);
         Layer = layer;
         Layer.register(this);
     }
@@ -67,6 +78,10 @@ public class Vehicle extends SimObject {
             double xv = getVelocity() / 60 * Math.cos(Math.toRadians(getHeading()));
             double yv = getVelocity() / 60 * Math.sin(Math.toRadians(getHeading()));
             move(xv, yv);
+            updateLocalTrafficGraph();
+            for(String id : ObjContacts) {
+                Layer.sendGraph(LocalTG,id);
+            }
         }
     }
 
@@ -74,11 +89,12 @@ public class Vehicle extends SimObject {
     //This function works by moving a point along a sensor line until it either goes out of range,
     //or collides with another SimObject in this Layer. The function then returns the distance from
     //the center of this SimObject to the point.
-    public double senseDist(double angle, double precision, double maxRange) {
+    public Pair<String,Double> senseDist(double angle, double precision, double maxRange) {
         //Local variables:
         double distance = 0; //Distance from the point to the center of this SimObject.
         double adjAngle = H[0] + angle; //Absolute sensor heading.
         boolean detected = false; //Is the point colliding with another figure?
+        String sensedObjID = ""; //The UUID of the sensed figure.
 
         //If 'detected' is false, and distance has not exceeded its max, move the point and test for collisions.
         while(!detected && distance < maxRange) {
@@ -94,12 +110,51 @@ public class Vehicle extends SimObject {
                 if(obj != this) {
                     if (obj.containsPoint(pointX, pointY)) {
                         detected = true;
+                        sensedObjID = obj.getID();
                     }
                 }
             }
         }
-        //Return the accumulated distance.
-        return distance;
+        //If no object is detected, return null. Otherwise, return the ID of the detected object and the distance to it.
+        if(!detected) {
+            return null;
+        }
+        else {
+            return new Pair<>(sensedObjID, distance);
+        }
+    }
+
+    private ArrayList<Pair<String,Pair<Double,Double>>> sensorSweep(double distPrecision, double anglePrecision, double maxRange) {
+        ArrayList<Pair<String,Pair<Double,Double>>> sensedObjs = new ArrayList<>();
+        ArrayList<String> contacts = new ArrayList<>();
+        for(int i = 0; i < 360; i += anglePrecision) {
+            Pair<String,Double> idAndDist = senseDist(i,distPrecision,maxRange);
+            if(idAndDist != null) {
+                contacts.add(idAndDist.fst);
+                double objX = Math.cos(Math.toRadians(i)) * idAndDist.snd;
+                double objY = Math.sin(Math.toRadians(i)) * idAndDist.snd;
+                sensedObjs.add(new Pair<>(idAndDist.fst,new Pair<>(objX,objY)));
+            }
+        }
+        ObjContacts = contacts;
+        return sensedObjs;
+    }
+
+    public void updateLocalTrafficGraph() {
+        ArrayList<Pair<String,Pair<Double,Double>>> Objs = sensorSweep(10, 15, 750);
+        for(Pair<String,Pair<Double,Double>> O : Objs) {
+            if(LocalTG.lookupNode(O.fst) != null) {
+                LocalTG.updateNodePosition(O.fst,O.snd);
+            }
+            else {
+                LocalTG.addNode(O.fst,O.snd,new double[]{0,0,0},new double[]{0,0,0});
+            }
+        }
+        LocalTG.updateNodeStatus(ID,V,H);
+    }
+
+    public void syncGraphWith(TrafficGraph remoteTG) {
+        LocalTG.syncWith(remoteTG);
     }
 
     //This function takes a target velocity and a delta, then sets these values in the velocity array.

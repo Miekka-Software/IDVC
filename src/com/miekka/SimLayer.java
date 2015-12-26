@@ -63,6 +63,13 @@ public class SimLayer {
         return null;
     }
 
+    public void sendGraph(TrafficGraph tGraph, String targetID) {
+        SimObject target = this.lookup(targetID);
+        if(target != null && target.IDVCCompat) {
+            ((Vehicle) target).syncGraphWith(tGraph);
+        }
+    }
+
     //This function filters through the whole HashMap and returns all SimObjects with a value of 'true'.
     public ArrayList<SimObject> checkCollisons(){
         ArrayList<SimObject> cObjs = new ArrayList<>();

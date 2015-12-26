@@ -14,6 +14,7 @@ import java.util.UUID;
 //This class also contains the crucial 'containsPoint' function for testing whether or not a point
 //is inside of the 'SimObject'. This is the basis for collision detection and Vehicle sensors.
 public class SimObject {
+
     //A unique identifier that can be used to look up the SimObject in the SimLayer.
     protected String ID;
 
@@ -26,6 +27,9 @@ public class SimObject {
 
     //Boolean that determines whether or not an object should be updated.
     protected boolean IsAnimated;
+
+    //Boolean that determines whether or not an object is IDVC compatible
+    public boolean IDVCCompat;
 
     //Other global class variables:
     protected Pair<Double,Double> Sz; //Size (xSize,ySize)
