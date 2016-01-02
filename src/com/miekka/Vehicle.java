@@ -124,6 +124,9 @@ public class Vehicle extends SimObject {
         }
     }
 
+
+    //Woah... This function sometimes returns multiple copies of the same sensed object. Find a way to merge them
+    //and average all of their positions.
     private ArrayList<Pair<String,Pair<Double,Double>>> sensorSweep(double distPrecision, double anglePrecision, double maxRange) {
         ArrayList<Pair<String,Pair<Double,Double>>> sensedObjs = new ArrayList<>();
         ArrayList<String> contacts = new ArrayList<>();
